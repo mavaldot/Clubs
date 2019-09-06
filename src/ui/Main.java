@@ -1,5 +1,8 @@
 package ui;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -28,10 +31,7 @@ public class Main {
 		
 		boolean running = true;
 		
-		String stro = "o";
-		
-		Club c = new Club(stro, stro, stro, stro);
-		System.out.println(c);
+		clubCollection.loadClubs();
 		
 		while (running) {
 			
@@ -44,6 +44,22 @@ public class Main {
 			System.out.println("5. Salir\n");
 			
 			int choice = askInt();
+			
+			File f = new File("a.txt");
+			
+			PrintWriter p;
+			
+			
+			
+			try {
+				p = new PrintWriter(f);
+				p.print("aaaay");
+				p.close();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			
 			switch (choice) {
 			
@@ -67,6 +83,8 @@ public class Main {
 				else
 					System.out.println("ERROR. No se encontro un club con ese ID");
 				
+				break;
+				
 			case 3:
 				
 				String clubID = askString("Por favor digite el ID del club");
@@ -82,13 +100,16 @@ public class Main {
 					System.out.println("ERROR. Ya existe un club con ese ID");
 				}
 				
+				clubCollection.saveClubs();
+				
+				
 				break;
 				
 			case 4:
 					
 				String delID = askString("Por favor digite el ID del club que desea eliminar");
 				if (clubCollection.deleteClub(delID))
-					System.out.println("El club ha sido borrado exitosamente");
+					System.out.println("El club ha sido eliminado exitosamente");
 				else 
 					System.out.println("No se encontro un club con ese ID");
 				break;
@@ -96,6 +117,7 @@ public class Main {
 			case 5:
 				
 				running = false;
+				clubCollection.saveClubs();
 				System.out.println("Hasta luego!");
 				break;
 				
@@ -171,7 +193,7 @@ public class Main {
 				String poBirthDate = askString("Por favor digite la fecha de nacimiento del dueno");
 				String poPrefPetType = askString("Por favor digite el tipo preferidode mascota");
 				
-				if(!clubCollection.findOwner(poID)) 
+				if (!clubCollection.findOwner(poID)) 
 					clubCollection.addOwner(poNames, poLastNames, poID, poBirthDate, poPrefPetType);
 				else
 					System.out.println("ERROR. Ya existe un dueno con ese ID");
@@ -255,13 +277,15 @@ public class Main {
 				String delID = askString("Por favor digite el ID de la mascota");
 				
 				if (clubCollection.deletePet(delID))
-					System.out.println("");
+					System.out.println("La mascota ha sido eliminada exitosamente");
 				else
-					System.out.println("");
+					System.out.println("No se encontro una mascota con ese ID");
 				
 				break;
 				
 			case 4:
+				
+				System.out.println("Por favor elija el criterio de busqueda");
 				
 				
 				break;
@@ -302,7 +326,7 @@ public class Main {
 			String ans = s.nextLine();
 			ret = Integer.parseInt(ans);
 		} 
-		catch (NumberFormatException nfe){
+		catch (NumberFormatException nfe) {
 			System.out.println("ERROR. Por favor digite un NUMERO");
 		}
 		

@@ -8,6 +8,10 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+enum OwnerOrder {
+	NONE;
+}
+
 public class Club implements Comparable<Club> {
 
 	private String id;
@@ -23,7 +27,7 @@ public class Club implements Comparable<Club> {
 		this.name = name;
 		this.creationDate = creationDate;
 		this.type = type;
-
+		
 		petOwners = new ArrayList<PetOwner>();
 	}
 	
@@ -46,7 +50,7 @@ public class Club implements Comparable<Club> {
 		return info;
  	}
 	
-	public String toString() {
+	public String getData() {
 		String ret = "";
 		ret += name + System.lineSeparator();
 		ret += id + System.lineSeparator();

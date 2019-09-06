@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -15,13 +16,65 @@ public class ClubCollection {
 	private Club selectedClub;
 	private PetOwner selectedPetOwner;
 	
-	
 	public ClubCollection() {
 		name = "Hello";
 		clubs = new ArrayList<Club>();
 	}
 	
 	public void saveClubs() {
+		
+		File res = new File("res");
+		if(!res.exists())
+			res.mkdir();
+		
+		File f = new File("res\\clubs.txt");
+		
+		try {
+			PrintWriter out = new PrintWriter(f);
+			for(Club c : clubs) {
+				out.println(c.getData());
+			}
+			out.close();
+		}
+		catch (FileNotFoundException e) {
+		}
+	}
+	
+	public void loadClubs() {
+		
+		File res = new File("res");
+		
+		if(!res.exists())
+			res.mkdir();
+		
+		File f = new File("res\\clubs.txt");
+		
+		
+		
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(f));
+			
+			String next = null;
+			
+			
+			while ( (next=br.readLine()) != null) {
+				String name = next;
+				String id = br.readLine();
+				String creationDate = br.readLine();
+				String type = br.readLine();
+				br.readLine();
+				
+				System.out.println(name + id + creationDate + type);
+				
+				clubs.add(new Club(name, id, creationDate, type));
+			}
+			
+		}
+		catch (FileNotFoundException e) {
+		} 
+		catch (IOException e) {
+		}
+		
 		
 	}
 	

@@ -8,6 +8,10 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+enum PetOrder {
+	NONE;
+}
+
 public class PetOwner implements Serializable {
 
 	private String names;
@@ -24,6 +28,7 @@ public class PetOwner implements Serializable {
 		this.id = id;
 		this.birthDate = birthDate;
 		this.prefPetType = prefPetType;
+		
 		
 		pets = new ArrayList<Pet>();
 	}
