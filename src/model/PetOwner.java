@@ -18,10 +18,6 @@ public class PetOwner implements Serializable {
 	
 	private ArrayList<Pet> pets;
 	
-	public PetOwner() {
-		names = "Johan";
-	}
-	
 	public PetOwner(String names, String lastNames, String id, String birthDate, String prefPetType) {
 		this.names = names;
 		this.lastNames = lastNames;
@@ -36,6 +32,18 @@ public class PetOwner implements Serializable {
 		return id;
 	}
 	
+	public String showInfo() {
+		
+		String info = "";
+		info += "Nombres: " + names + "\n";
+		info += "Apellidos: " + lastNames + "\n";
+		info += "ID: " + id + "\n";
+		info += "Fecha de nacimiento: " + birthDate + "\n";
+		info += "Mascota de preferencia: " + prefPetType + "\n";
+		
+		return info;
+	}
+	
 	public void save(String dir) {
 		
 		File d = new File(dir);
@@ -45,11 +53,8 @@ public class PetOwner implements Serializable {
 		
 		String filename = dir + "\\" + id + ".se";
 		File f = new File(filename);
-		Pet pito = new Pet();;
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f));
-			
-			oos.writeObject(pito);
 			oos.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -57,6 +62,24 @@ public class PetOwner implements Serializable {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public void addPet(String name, String id, String birthDate, String gender, String type) {
+		pets.add(new Pet(name, id, birthDate, gender, type));
+	}
+	
+	public boolean deletePet(String id) {
+		
+		boolean found = false;
+		
+		for (int i = 0; i < pets.size(); i++) {
+			if (pets.get(i).getId().equals(id)) {
+				pets.remove(i);
+				found = true;
+			}
+		}
+		
+		return found;
 	}
 	
 	public void savePet(String dir) {
@@ -68,11 +91,8 @@ public class PetOwner implements Serializable {
 		
 		String filename = dir + "\\" + id + ".se";
 		File f = new File(filename);
-		Pet pito = new Pet();;
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f));
-			
-			oos.writeObject(pito);
 			oos.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

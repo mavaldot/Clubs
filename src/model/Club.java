@@ -38,10 +38,10 @@ public class Club implements Comparable<Club> {
 	public String showInfo()  {
 		String info = "";
 		
-		info += name + "\n";
+		info += "Nombre: " + name + "\n";
 		info += "ID: " + id + "\n";
-		info += "Creation date: " + creationDate + "\n";
-		info += "Type: " + type + "\n";
+		info += "Fecha de creacion: " + creationDate + "\n";
+		info += "Tipo: " + type + "\n";
 		
 		return info;
  	}
@@ -72,7 +72,7 @@ public class Club implements Comparable<Club> {
 			
 			out.println(this.toString());
 			
-			for(PetOwner po : petOwners) {
+			for (PetOwner po : petOwners) {
 				out.println(po.toString());
 			}
 			out.close();
@@ -89,11 +89,11 @@ public class Club implements Comparable<Club> {
 		String dir = "res\\" + name;
 		
 		File d = new File(dir);
-		if(!d.exists()) {
+		if (!d.exists()) {
 			d.mkdirs();
 		}
 		
-		for(PetOwner po : petOwners) {
+		for (PetOwner po : petOwners) {
 			
 			try {
 				
@@ -118,10 +118,23 @@ public class Club implements Comparable<Club> {
 		String dir = "res\\" + name;
 		
 		File d = new File(dir);
-		if(!d.exists()) {
+		if (!d.exists()) {
 			d.mkdirs();
 		}
 		
+	}
+	
+	public boolean findOwner(String id) {
+		
+		boolean found = false;
+		
+		for (PetOwner po : petOwners) {
+			if(po.getID().equals(id)) {
+				found = true;
+			}
+		}
+		
+		return found;
 		
 	}
 
@@ -131,6 +144,20 @@ public class Club implements Comparable<Club> {
 		int ret = name.compareTo(c.getName());
 		
 		return ret;
+	}
+
+	public PetOwner selectPetOwner(String id) {
+		
+		PetOwner retPO = null;
+		
+		for(PetOwner po : petOwners) {
+			if(po.getID().equals(id)) {
+				retPO = po;
+			}
+		}
+		
+		return retPO;
+		
 	}
 	
 }

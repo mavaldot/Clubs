@@ -1,6 +1,9 @@
 package ui;
 
+import java.util.ArrayList;
 import java.util.Scanner;
+
+import model.Club;
 import model.ClubCollection;
 import model.ClubNotFoundException;
 import model.PetOwner;
@@ -25,7 +28,12 @@ public class Main {
 		
 		boolean running = true;
 		
-		while(running) {
+		String stro = "o";
+		
+		Club c = new Club(stro, stro, stro, stro);
+		System.out.println(c);
+		
+		while (running) {
 			
 			System.out.println("\nBienvenido! Elija una opcion:");
 
@@ -52,8 +60,12 @@ public class Main {
 				
 			case 2:
 				
-				String id = askString("Por favor digite el ID del club");
-				clubMenu(id);
+				String id = askString("Por favor digite el id del club");
+				
+				if (clubCollection.selectClub(id)) 
+					clubMenu();
+				else
+					System.out.println("ERROR. No se encontro un club con ese ID");
 				
 			case 3:
 				
@@ -62,10 +74,11 @@ public class Main {
 				String clubCreationDate = askString("Por favor digite la fecha que se creo el club");
 				String clubType = askString("Por favor digite el tipo de club");
 				
-				if(!clubCollection.findClub(clubID)) {
+				if (!clubCollection.findClub(clubID)) {
 					clubCollection.addClub(clubID, clubName, clubCreationDate, clubType);
 					System.out.println("Su club ha sido agregado!");
-				} else {
+				} 
+				else {
 					System.out.println("ERROR. Ya existe un club con ese ID");
 				}
 				
@@ -83,7 +96,7 @@ public class Main {
 			case 5:
 				
 				running = false;
-				System.out.println();
+				System.out.println("Hasta luego!");
 				break;
 				
 			case 6:
@@ -111,29 +124,23 @@ public class Main {
 		clubCollection.load();
 		clubCollection.save();
 		clubCollection.saveClubs();
-		PetOwner p = new PetOwner();
 	}
 	
-	public void clubMenu(String id) {
+	public void clubMenu() {
 		
 		boolean exit = false;
 		
-		while(!exit) {
+		while (!exit) {
 			
-			try {
-				
-				System.out.println(clubCollection.showInfo(id));
-				
-			} catch (ClubNotFoundException e) {
-				System.out.println("No se pudo encontrar un club con ese ID\n");
-				exit = true;
-			}
+			System.out.println("");
+			System.out.print(clubCollection.showClubInfo());
 			
 			System.out.println("\nPor favor elija un opcion: ");
 			System.out.println("1. Ver una lista de los duenos");
 			System.out.println("2. Agregar un dueno");
 			System.out.println("3. Eliminar un dueno");
 			System.out.println("4. Entrar al menu de un dueno");
+			System.out.println("5. Salir");
 			System.out.println("");
 			
 			int choice = askInt();
@@ -164,17 +171,33 @@ public class Main {
 				String poBirthDate = askString("Por favor digite la fecha de nacimiento del dueno");
 				String poPrefPetType = askString("Por favor digite el tipo preferidode mascota");
 				
-				
+				if(!clubCollection.findOwner(poID)) 
+					clubCollection.addOwner(poNames, poLastNames, poID, poBirthDate, poPrefPetType);
+				else
+					System.out.println("ERROR. Ya existe un dueno con ese ID");
+					
 				break;
 				
 			case 3:
 				
+				String id = askString("Por favor digite el ID del dueno");
+				
+				if (clubCollection.selectPetOwner(id)) 
+					ownerMenu();
+				else 
+					System.out.println("ERROR. No se encontro un dueno con ese ID");
+					
 				break;
 				
 			case 4:
 				
 				break;	
 				
+			case 5:
+			
+				exit = true;
+				break;
+			
 			default:
 				System.out.println("ERROR. Digite una opcion valida");
 					
@@ -184,13 +207,88 @@ public class Main {
 		
 	}
 	
+	public void ownerMenu() {
+		
+		boolean exit = false;
+		
+		while(!exit) {
+			
+			System.out.println(clubCollection.showPetOwnerInfo());
+			
+			System.out.println("");
+			System.out.println("1. Ver la lista de mascotas");
+			System.out.println("2. Agregar una mascota ");
+			System.out.println("3. Eliminar una mascota");
+			System.out.println("4. Buscar una mascota");
+			System.out.println("5. Salir");
+			
+			int choice = askInt();
+			
+			switch (choice) {
+			
+			case 1:
+				
+				System.out.println("Por favor elija el criterio de ordenamiento");
+				System.out.println("1. Ordenar por el nombre");
+				System.out.println("2. Ordenar por el apellido");
+				System.out.println("3. Ordenar por el id");
+				System.out.println("4. Ordenar por la fecha de nacimiento");
+				System.out.println("5. Ordenar por el tipo preferido de mascota");
+				System.out.println("");
+				
+				break;
+				
+			case 2:
+				
+				String pName = askString("Por favor digite el nombre de la mascota");
+				String pID = askString("Por favor digite el ID de la mascota");
+				String pBirthDate = askString("Por favor digite la fecha de nacimiento de la mascota");
+				String pGender = askString("Por favor digite el genero de la mascota");
+				String pType = askString("Por favor digite el tipo de la mascota");
+				
+				clubCollection.addPet(pName, pID, pBirthDate, pGender, pType);
+				
+				break;
+				
+			case 3:
+				
+				String delID = askString("Por favor digite el ID de la mascota");
+				
+				if (clubCollection.deletePet(delID))
+					System.out.println("");
+				else
+					System.out.println("");
+				
+				break;
+				
+			case 4:
+				
+				
+				break;
+				
+			case 5:
+				
+				exit = true;
+				break;
+				
+			default:
+				
+				System.out.println("ERROR. Digite una opcion valida");
+				break;
+			
+			}
+			
+		}
+	}
+	
 	
 	public int askInt() {
 		int ret = 0;
 		try {
 			String ans = s.nextLine();
 			ret = Integer.parseInt(ans);
-		} catch (NumberFormatException nfe){
+		}
+		catch (NumberFormatException nfe){
 			System.out.println("ERROR. Por favor digite un NUMERO");
 		}
 		
@@ -203,7 +301,8 @@ public class Main {
 		try {
 			String ans = s.nextLine();
 			ret = Integer.parseInt(ans);
-		} catch (NumberFormatException nfe){
+		} 
+		catch (NumberFormatException nfe){
 			System.out.println("ERROR. Por favor digite un NUMERO");
 		}
 		

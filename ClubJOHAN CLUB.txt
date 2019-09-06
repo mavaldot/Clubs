@@ -1,5 +1,0 @@
-Name: JOHAN CLUB
-ID: JC1234
-Creation Date: 1 de enero
-Type: Perros
-

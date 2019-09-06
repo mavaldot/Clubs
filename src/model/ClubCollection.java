@@ -12,6 +12,9 @@ public class ClubCollection {
 	private String name;
 	
 	private ArrayList<Club> clubs;
+	private Club selectedClub;
+	private PetOwner selectedPetOwner;
+	
 	
 	public ClubCollection() {
 		name = "Hello";
@@ -29,7 +32,8 @@ public class ClubCollection {
 			PrintWriter out = new PrintWriter(f);
 			out.print(name);
 			out.close();
-		} catch (FileNotFoundException e) {
+		}
+		catch (FileNotFoundException e) {
 			
 			e.printStackTrace();
 		}
@@ -57,8 +61,8 @@ public class ClubCollection {
 	public boolean findClub(String id) {
 		boolean exists = false;
 		
-		for(int i = 0; i < clubs.size() && !exists; i++) {
-			if(clubs.get(i).getId().equals(id)) {
+		for (int i = 0; i < clubs.size() && !exists; i++) {
+			if (clubs.get(i).getId().equals(id)) {
 				clubs.remove(i);
 				exists = true;
 			}
@@ -67,21 +71,60 @@ public class ClubCollection {
 		return exists;
 	}
 	
-	public String showInfo(String id) throws ClubNotFoundException {
+	public boolean findOwner(String id) {
+		boolean ret = selectedClub.findOwner(id);
+		
+		return ret;
+	}
+	
+	public void addOwner(String names, String lastNames, String id, String birthDate, String prefPetType) {
+		selectedClub.addPetOwner(names, lastNames, id, birthDate, prefPetType);
+	}
+	
+	public void addPet(String name, String id, String birthDate, String gender, String type) {
+		selectedPetOwner.addPet(name, id, birthDate, gender, type);
+	}
+	
+	public boolean selectPetOwner(String id) {
+		
+		selectedPetOwner = selectedClub.selectPetOwner(id);
+		
+		boolean ret = (selectedClub != null);
+		
+		return ret;
+	}
+	
+	public boolean selectClub(String id) {
 		
 		boolean found = false;
-		String msg = "";
 		
-		for(int i = 0; i < clubs.size() && !found; i++) {
-			if(clubs.get(i).getId().equals(id)) {
+		for (int i = 0; i < clubs.size() && !found; i++) {
+			if (clubs.get(i).getId().equals(id)) {
 				
 				found = true; 
-				msg += clubs.get(i).showInfo();
+				selectedClub = clubs.get(i);
 			}
 		}
 		
-		if(!found)
-			throw new ClubNotFoundException("El club no se pudo encontrar");
+		return found;
+		
+	}
+	
+	public boolean deletePet(String id) {
+		boolean ret = selectedPetOwner.deletePet(id);
+		return ret;
+	}
+	
+	public String showClubInfo()  {
+
+		String msg = "CLUB SELECCIONADO:\n" + selectedClub.showInfo();
+		
+		return msg;
+	}
+	
+	public String showPetOwnerInfo() {
+		
+		String msg = "CLUB SELECCIONADO:\n" + selectedPetOwner.toString();
 		
 		return msg;
 	}
@@ -91,14 +134,15 @@ public class ClubCollection {
 		boolean success = false;
 		File res = new File("res\\clubs");
 		
-		if(!res.exists()) {
+		if (!res.exists()) {
 			res.mkdirs();
-		} else {
+		}
+		else {
 
 			File[] resFiles = res.listFiles();
 			
-			if(resFiles != null) {
-				for(File child : resFiles) {
+			if (resFiles != null) {
+				for (File child : resFiles) {
 					try {
 						BufferedReader br = new BufferedReader(new FileReader(child));
 						String id = br.readLine();
@@ -109,20 +153,23 @@ public class ClubCollection {
 						addClub(id, name, creationDate, type);
 						success = true;
 						
-					} catch ( Exception e) {
+					}
+					catch ( Exception e) {
 
 					}
 				}
 			}
+			
 		}
 		
-		for(Club c : clubs) {
+		for (Club c : clubs) {
 			System.out.println(c.toString());
 		}
 		
 		return success;
 		
 	}
+	
 	
 	
 	
