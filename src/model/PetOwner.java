@@ -7,12 +7,13 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 enum PetOrder {
 	NONE;
 }
 
-public class PetOwner implements Serializable {
+public class PetOwner implements Serializable, Comparable<PetOwner>, Comparator<PetOwner> {
 
 	private String names;
 	private String lastNames;
@@ -48,27 +49,7 @@ public class PetOwner implements Serializable {
 		
 		return info;
 	}
-	
-	public void save(String dir) {
-		
-		File d = new File(dir);
-		if(!d.exists()) {
-			d.mkdirs();
-		}
-		
-		String filename = dir + "\\" + id + ".se";
-		File f = new File(filename);
-		try {
-			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f));
-			oos.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
+
 	public void addPet(String name, String id, String birthDate, String gender, String type) {
 		pets.add(new Pet(name, id, birthDate, gender, type));
 	}
@@ -106,5 +87,23 @@ public class PetOwner implements Serializable {
 		}
 		
 	}
+
+	@Override
+	public int compareTo(PetOwner po) {
+		
+		int ret = id.compareTo(po.getID());
+		
+		return ret;
+	}
+	
+	@Override
+	public int compare(PetOwner o1, PetOwner o2) {
+		
+		
+		
+		return 0;
+	}
+
+
 		
 }

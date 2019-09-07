@@ -1,18 +1,21 @@
 package model;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 enum OwnerOrder {
 	NONE;
 }
 
-public class Club implements Comparable<Club> {
+public class Club implements Comparable<Club>, Comparator<Club> {
 
 	private String id;
 	private String name;
@@ -38,6 +41,18 @@ public class Club implements Comparable<Club> {
 	public String getName() {
 		return name;
 	}
+	
+	public String getCreationDate() {
+		return creationDate;
+	}
+
+	public String getType() {
+		return type;
+	}
+	public ArrayList<PetOwner> getPetOwners() {
+		return petOwners;
+	}
+
 
 	public String showInfo()  {
 		String info = "";
@@ -52,16 +67,17 @@ public class Club implements Comparable<Club> {
 	
 	public String getData() {
 		String ret = "";
-		ret += name + System.lineSeparator();
-		ret += id + System.lineSeparator();
-		ret += creationDate + System.lineSeparator();
-		ret += type + System.lineSeparator();
+		ret += name + ",";
+		ret += id + ",";
+		ret += creationDate + ",";
+		ret += type;
 		
 		return ret;
 	}
 	
 	public void addPetOwner(String names, String lastNames, String id, String birthDate, String prefPetType ) {
 		petOwners.add(new PetOwner(names, lastNames, id, birthDate, prefPetType));
+		saveOwners();
 	}
 	
 	public void save() {
@@ -90,40 +106,37 @@ public class Club implements Comparable<Club> {
 	
 	public void saveOwners() {
 		
-		String dir = "res\\" + name;
+		File f = new File("res\\" + id + ".se");
 		
-		File d = new File(dir);
-		if (!d.exists()) {
-			d.mkdirs();
-		}
-		
-		for (PetOwner po : petOwners) {
+		try {
 			
-			try {
-				
-				String filename = dir + "\\" + po.getID() + ".se";
-				File f = new File(filename);
-				
-				ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f));
-				
-				oos.writeObject(po);
-				oos.close();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f));
+			oos.writeObject(petOwners);
+			oos.close();
+			
+		}
+		catch (IOException e) {
+			// e.printStackTrace();
 		}
 		
 	}
 	
 	public void loadOwners() {
 		
-		String dir = "res\\" + name;
+		File f = new File("res\\" + id + ".se");
 		
-		File d = new File(dir);
-		if (!d.exists()) {
-			d.mkdirs();
+		try {
+			
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
+			petOwners = (ArrayList<PetOwner>) ois.readObject();
+			
+			petOwners.forEach( po -> System.out.println(po.toString()) );
+			
+			
+		} catch (IOException e) {
+			//e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			//e.printStackTrace();
 		}
 		
 	}
@@ -142,14 +155,6 @@ public class Club implements Comparable<Club> {
 		
 	}
 
-	@Override
-	public int compareTo(Club c) {
-		
-		int ret = name.compareTo(c.getName());
-		
-		return ret;
-	}
-
 	public PetOwner selectPetOwner(String id) {
 		
 		PetOwner retPO = null;
@@ -163,5 +168,35 @@ public class Club implements Comparable<Club> {
 		return retPO;
 		
 	}
+
+	@Override
+	public int compareTo(Club c) {
+		
+		int ret = name.compareTo(c.getName());
+		
+		return ret;
+	}
 	
+	@Override
+	public int compare(Club o1, Club o2) {
+		
+		int ret = o1.getName().compareTo(o2.getName());
+		
+		return ret;
+	}
+	
+	public int compareCreationDate(Club c) {
+		
+		int ret = creationDate.compareTo(c.getCreationDate());
+		
+		return ret;
+		
+	}
+	
+	public int compareType(Club c) {
+		
+		int ret = type.compareTo(c.getCreationDate());
+		
+		return ret;
+	}
 }

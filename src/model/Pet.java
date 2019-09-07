@@ -1,8 +1,9 @@
 package model;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
-public class Pet implements Serializable {
+public class Pet implements Serializable, Comparable<Pet>, Comparator<Pet>{
 
 	private String name;
 	private String id;
@@ -51,6 +52,22 @@ public class Pet implements Serializable {
 	
 		return info;
 		
+	}
+
+
+
+	@Override
+	public int compare(Pet o1, Pet o2) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+
+	@Override
+	public int compareTo(Pet o) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 	

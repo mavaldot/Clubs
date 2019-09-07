@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 
 class ClubCollectionTest {
 
+	
+	
 	@Test
 	void test() {
 		fail("Not yet implemented");

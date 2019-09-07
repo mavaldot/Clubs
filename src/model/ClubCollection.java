@@ -9,34 +9,30 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class ClubCollection {
-
-	private String name;
 	
 	private ArrayList<Club> clubs;
 	private Club selectedClub;
 	private PetOwner selectedPetOwner;
 	
 	public ClubCollection() {
-		name = "Hello";
 		clubs = new ArrayList<Club>();
 	}
 	
 	public void saveClubs() {
 		
 		File res = new File("res");
-		if(!res.exists())
+		if (!res.exists())
 			res.mkdir();
 		
 		File f = new File("res\\clubs.txt");
 		
 		try {
 			PrintWriter out = new PrintWriter(f);
-			for(Club c : clubs) {
-				out.println(c.getData());
-			}
+			clubs.forEach(c -> out.println(c.getData()));
 			out.close();
 		}
 		catch (FileNotFoundException e) {
+			
 		}
 	}
 	
@@ -44,67 +40,58 @@ public class ClubCollection {
 		
 		File res = new File("res");
 		
-		if(!res.exists())
+		if (!res.exists())
 			res.mkdir();
+		else 
+			System.out.println("aaaaa");
 		
 		File f = new File("res\\clubs.txt");
-		
-		
 		
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(f));
 			
 			String next = null;
 			
-			
 			while ( (next=br.readLine()) != null) {
-				String name = next;
-				String id = br.readLine();
-				String creationDate = br.readLine();
-				String type = br.readLine();
-				br.readLine();
 				
-				System.out.println(name + id + creationDate + type);
+				String[] data = next.split(",");
 				
-				clubs.add(new Club(name, id, creationDate, type));
+				System.out.println(data[0] + data[1] + data[2] + data[3]);
+				
+				clubs.add(new Club(data[0], data[1], data[2], data[3]));
 			}
 			
 		}
 		catch (FileNotFoundException e) {
+			//e.printStackTrace();
 		} 
 		catch (IOException e) {
+			//e.printStackTrace();
 		}
-		
 		
 	}
 	
-	public void save() {
-		File f = new File("ClubCollection.txt");
+	public void loadOwners() {
 		
-		try {
-			PrintWriter out = new PrintWriter(f);
-			out.print(name);
-			out.close();
-		}
-		catch (FileNotFoundException e) {
-			
-			e.printStackTrace();
-		}
+		clubs.forEach(c -> c.loadOwners());
+		
 		
 	}
 	
 	public void addClub(String id, String name, String creationDate, String type) {
 		clubs.add(new Club(id, name, creationDate, type));
+		saveClubs();
 	}
 	
 	public boolean deleteClub(String id) {
 		
 		boolean success = false;
 		
-		for(int i = 0; i < clubs.size() && !success; i++) {
-			if(clubs.get(i).getId().equals(id)) {
+		for (int i = 0; i < clubs.size() && !success; i++) {
+			if (clubs.get(i).getId().equals(id)) {
 				clubs.remove(i);
 				success = true;
+				saveClubs();
 			}
 		}
 		
@@ -115,10 +102,8 @@ public class ClubCollection {
 		boolean exists = false;
 		
 		for (int i = 0; i < clubs.size() && !exists; i++) {
-			if (clubs.get(i).getId().equals(id)) {
-				clubs.remove(i);
+			if (clubs.get(i).getId().equals(id))
 				exists = true;
-			}
 		}
 		
 		return exists;
@@ -182,6 +167,8 @@ public class ClubCollection {
 		return msg;
 	}
 	
+	
+	
 	public boolean load() {
 		
 		boolean success = false;
@@ -207,7 +194,7 @@ public class ClubCollection {
 						success = true;
 						
 					}
-					catch ( Exception e) {
+					catch ( IOException e) {
 
 					}
 				}
