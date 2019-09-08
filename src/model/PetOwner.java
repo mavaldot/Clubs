@@ -10,6 +10,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 enum PetOrder {
+	NAME,
+	ID,
+	BIRTHDATE,
+	GENDER,
+	TYPE,
 	NONE;
 }
 
@@ -20,6 +25,7 @@ public class PetOwner implements Serializable, Comparable<PetOwner>, Comparator<
 	private String id;
 	private String birthDate;
 	private String prefPetType;
+	PetOrder order;
 	
 	private ArrayList<Pet> pets;
 	
@@ -67,6 +73,7 @@ public class PetOwner implements Serializable, Comparable<PetOwner>, Comparator<
 		info += "ID: " + id + "\n";
 		info += "Fecha de nacimiento: " + birthDate + "\n";
 		info += "Mascota de preferencia: " + prefPetType + "\n";
+		info += "Numero de mascotas: " + pets.size() + "\n";
 		
 		return info;
 	}
@@ -75,38 +82,18 @@ public class PetOwner implements Serializable, Comparable<PetOwner>, Comparator<
 		pets.add(new Pet(name, id, birthDate, gender, type));
 	}
 	
-	public boolean deletePet(String id) {
+	public boolean deletePet(String name) {
 		
 		boolean found = false;
 		
 		for (int i = 0; i < pets.size(); i++) {
-			if (pets.get(i).getId().equals(id)) {
+			if (pets.get(i).getName().equals(name)) {
 				pets.remove(i);
 				found = true;
 			}
 		}
 		
 		return found;
-	}
-	
-	public void savePet(String dir) {
-		
-		File d = new File(dir);
-		if(!d.exists()) {
-			d.mkdirs();
-		}
-		
-		String filename = dir + "\\" + id + ".se";
-		File f = new File(filename);
-		try {
-			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f));
-			oos.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
 	}
 
 	@Override
@@ -143,6 +130,180 @@ public class PetOwner implements Serializable, Comparable<PetOwner>, Comparator<
 		return ret;
 	}
 
-
+	public int compareNumberOfPets(PetOwner po) {
 		
+		int ret = pets.size() - po.getPets().size();
+		return ret;
+		
+	}
+
+
+	public String showPetList(int petOrder) {
+		
+		String ret = "";
+		boolean error = false;
+		
+		switch (petOrder) {
+		
+		case 1:
+			
+			orderByName();
+			break;
+		
+		case 2:
+			
+			orderById();
+			break;
+			
+		case 3:
+			
+			orderByBirthDate();
+			break;
+			
+		case 4:
+			
+			orderByGender();
+			break;
+			
+		case 5:
+			
+			orderByType();
+			break;
+			
+		default:
+			error = true;
+			break;
+		}
+		
+		if (!error) {
+			ret += "\nLISTA DE MASCOTAS:\n\n";
+
+			for(int i = 0; i < pets.size(); i++) {
+				
+				ret += "Mascota #" + (i+1) + "\n";
+				ret += pets.get(i).showInfo();
+				ret += "\n";
+				
+			}
+			
+		} 
+		else {
+			ret = "Error. Ha digitado un numero erroneo.";
+		}
+
+		return ret;
+	}
+
+	//insertion sort
+	public void orderByType() {
+		if (order != PetOrder.TYPE) {
+			
+			for(int i = 0; i < pets.size() - 1; i++) {
+				for(int j = 0; j < pets.size() - i - 1; j++) {
+					if(pets.get(j).compareType(pets.get(j+1)) > 0) {
+						Pet tmp = pets.get(j);
+						pets.set(j, pets.get(j+1));
+						pets.set(j+1, tmp);
+					}
+				}
+				
+			}
+			
+			order = PetOrder.TYPE;		
+		}
+		
+	}
+
+	//insertion sort
+	public void orderByGender() {
+		if (order != PetOrder.GENDER) {
+			
+			for(int i = 0; i < pets.size() - 1; i++) {
+				for(int j = 0; j < pets.size() - i - 1; j++) {
+					if(pets.get(j).compareGender(pets.get(j+1)) > 0) {
+						Pet tmp = pets.get(j);
+						pets.set(j, pets.get(j+1));
+						pets.set(j+1, tmp);
+					}
+				}
+				
+			}
+			
+			order = PetOrder.GENDER;		
+		}
+		
+	}
+
+	//insertion sort
+	public void orderByBirthDate() {
+		if (order != PetOrder.BIRTHDATE) {
+			
+			for(int i = 0; i < pets.size() - 1; i++) {
+				for(int j = 0; j < pets.size() - i - 1; j++) {
+					if(pets.get(j).compareBirthDate(pets.get(j+1)) > 0) {
+						Pet tmp = pets.get(j);
+						pets.set(j, pets.get(j+1));
+						pets.set(j+1, tmp);
+					}
+				}
+				
+			}
+			
+			order = PetOrder.BIRTHDATE;		
+		}
+		
+	}
+
+	//insertion sort
+	public void orderById() {
+		
+		if (order != PetOrder.ID) {
+			
+			for(int i = 0; i < pets.size() - 1; i++) {
+				for(int j = 0; j < pets.size() - i - 1; j++) {
+					if(pets.get(j).compare(pets.get(j), pets.get(j+1)) > 0) {
+						Pet tmp = pets.get(j);
+						pets.set(j, pets.get(j+1));
+						pets.set(j+1, tmp);
+					}
+				}
+				
+			}
+			
+			order = PetOrder.ID;		
+		}
+	}
+
+	//insertion sort
+	public void orderByName() {
+		if (order != PetOrder.NAME) {
+			
+			for(int i = 0; i < pets.size() - 1; i++) {
+				for(int j = 0; j < pets.size() - i - 1; j++) {
+					if(pets.get(j).compareTo(pets.get(j+1)) > 0) {
+						Pet tmp = pets.get(j);
+						pets.set(j, pets.get(j+1));
+						pets.set(j+1, tmp);
+					}
+				}
+				
+			}
+			
+			order = PetOrder.NAME;		
+		}
+		
+	}
+
+	public String searchPets(int criteria, String item) {
+		
+		String result = "";
+		
+		switch (criteria) {
+		
+		}
+		
+		return result;
+	}
+		
+	
 }

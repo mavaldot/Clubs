@@ -19,8 +19,6 @@ public class Pet implements Serializable, Comparable<Pet>, Comparator<Pet>{
 		this.type = type;
 	}
 	
-	
-	
 	public String getName() {
 		return name;
 	}

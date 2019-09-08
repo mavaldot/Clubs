@@ -55,8 +55,6 @@ public class ClubCollection {
 		
 		if (!res.exists())
 			res.mkdir();
-		else 
-			System.out.println("aaaaa");
 		
 		File f = new File("res\\clubs.txt");
 		
@@ -134,13 +132,14 @@ public class ClubCollection {
 	
 	public void addPet(String name, String id, String birthDate, String gender, String type) {
 		selectedPetOwner.addPet(name, id, birthDate, gender, type);
+		selectedClub.saveOwners();
 	}
 	
 	public boolean selectPetOwner(String id) {
 		
 		selectedPetOwner = selectedClub.selectPetOwner(id);
 		
-		boolean ret = (selectedClub != null);
+		boolean ret = (selectedPetOwner != null);
 		
 		return ret;
 	}
@@ -161,8 +160,8 @@ public class ClubCollection {
 		
 	}
 	
-	public boolean deletePet(String id) {
-		boolean ret = selectedPetOwner.deletePet(id);
+	public boolean deletePet(String name) {
+		boolean ret = selectedPetOwner.deletePet(name);
 		return ret;
 	}
 	
@@ -175,7 +174,7 @@ public class ClubCollection {
 	
 	public String showPetOwnerInfo() {
 		
-		String msg = "CLUB SELECCIONADO:\n" + selectedPetOwner.toString();
+		String msg = "DUENO DE MASCOTA SELECCIONADO:\n" + selectedPetOwner.showInfo();
 		
 		return msg;
 	}
@@ -257,7 +256,7 @@ public class ClubCollection {
 		
 	}
 	
-	
+	//bubble sort
 	public void orderById() {
 		
 		if (order != ClubOrder.ID) {
@@ -276,8 +275,10 @@ public class ClubCollection {
 			order = ClubOrder.ID;		
 		}
 		
+		
 	}
 	
+	//selection sort
 	public void orderByCreationDate() {
 		
 		if (order != ClubOrder.CREATIONDATE) {
@@ -286,52 +287,303 @@ public class ClubCollection {
 				
 				Club min = clubs.get(i);
 				boolean change = false;
-				
 				int pos = 0;
 				
 				for (int j = i + 1; j < clubs.size(); j++) {	
 					if (min.compareCreationDate(clubs.get(j)) > 0) {
 						min = clubs.get(j);
 						pos = j;
-						System.out.println("cambio " + min.getData());
 						change = true;
 					}		
 				}
 				
 				if (change) {
-					Club tmp = min;
+					Club tmp = clubs.get(i);
 					clubs.set(i, min);
 					clubs.set(pos, tmp);
 				}
 			}
 			
 			order = ClubOrder.CREATIONDATE;
+			
+			System.out.println(order);
 		}
 		
 	}
 
+	//insertion sort
 	public void orderByType() {
 		
 		if (order != ClubOrder.TYPE) {
 			
+			for(int i = 1; i < clubs.size(); i++) {
+				for(int j = i - 1; j >= 0 && clubs.get(j).compareType(clubs.get(j+1)) > 0; j--) {
+					Club tmp = clubs.get(j);
+					clubs.set(j, clubs.get(j+1));
+					clubs.set(j+1, tmp);
+				}
+			}
 			
 			order = ClubOrder.TYPE;
 		}
 	}
 
-
-	
+	//insertion sort
 	public void orderByNumberOfPetOwners() {
 
 		if (order != ClubOrder.NUMBEROFPETOWNERS) {
 			
-			for(;;) {
-				break;
+			for(int i = 1; i < clubs.size(); i++) {
+				for(int j = i - 1; j >= 0 && clubs.get(j).compareSize(clubs.get(j+1)) > 0; j--) {
+					Club tmp = clubs.get(j);
+					clubs.set(j, clubs.get(j+1));
+					clubs.set(j+1, tmp);
+				}
 			}
 			
 			order = ClubOrder.NUMBEROFPETOWNERS;
 		}
 		
 	}
+
+	public String showOwnerList(int ownerOrder) {
+		
+		String ret = selectedClub.showOwnerList(ownerOrder);
+		
+		return ret;
+				
+	}
+
+	public boolean deleteOwner(String deleteId) {
+		
+		boolean ret = selectedClub.deleteOwner(deleteId); 
 	
+		return ret;
+	}
+
+	public String showPetList(int petOrder) {
+
+		String ret = selectedPetOwner.showPetList(petOrder);
+		
+		return ret;
+	}
+
+	public String searchClubs(int criteria, String item) {
+		
+		String result = "";
+		
+		switch (criteria) {
+		
+		case 1:
+			
+			long t1 = System.nanoTime();
+			result += binaryClubSearchName(item, 0, clubs.size()-1) + "\n";
+			
+			result += "Tiempo: " + (System.nanoTime() - t1) + "\n"; 
+			
+			long t2 = System.nanoTime();
+			result += clubSearchName(item);
+			result += "Tiempo: " + (System.nanoTime() - t2) + "\n";
+			
+			break;
+			
+		case 2:
+			
+			binaryClubSearchId(item, 0, clubs.size()-1);
+			clubSearchId(item);
+			break;
+			
+		case 3:
+			
+			binaryClubSearchCreationDate(item, 0, clubs.size()-1);
+			clubSearchCreationDate(item);
+			break;
+			
+		case 4:
+			
+			binaryClubSearchType(item, 0, clubs.size()-1);
+			clubSearchType(item);
+			break;
+			
+		default:
+			
+			result = "ERROR. Ha introducido un criterio de busqueda invalido.";
+			break;
+		
+		}
+		
+		return result;
+	}
+	
+	public String binaryClubSearchName(String name, int beg, int end) {
+		
+		orderByName();
+		
+		String ret = "";
+		
+		boolean found = false;
+		
+		while (!found && beg <= end) {
+			
+			int mid = (beg + end) / 2;
+			
+			if (clubs.get(mid).getName().equals(name)) {
+				found = true;
+				ret += clubs.get(mid).showInfo();
+				
+			}
+			if (clubs.get(mid).getName().compareTo(name) < 0)
+				beg = mid + 1;
+			else
+				end = mid - 1;
+		}
+		
+		return ret;
+	}
+	
+	public String binaryClubSearchId(String id, int beg, int end) {
+		
+		orderById();
+		
+		String ret = "";
+		
+		boolean found = false;
+		
+		while (!found && beg <= end) {
+			
+			int mid = (beg + end) / 2;
+			
+			if (clubs.get(mid).getId().equals(id)) {
+				found = true;
+				ret += clubs.get(mid).showInfo();
+				
+			}
+			if (clubs.get(mid).getId().compareTo(id) < 0)
+				beg = mid + 1;
+			else
+				end = mid - 1;
+		}
+		
+		return ret;
+	}
+	
+	public String binaryClubSearchCreationDate(String creationDate, int beg, int end) {
+		
+		orderByCreationDate();
+		
+		String ret = "";
+		
+		boolean found = false;
+		
+		while (!found && beg <= end) {
+			
+			int mid = (beg + end) / 2;
+			
+			if (clubs.get(mid).getCreationDate().equals(creationDate)) {
+				found = true;
+				ret += clubs.get(mid).showInfo();
+				
+			}
+			if (clubs.get(mid).getCreationDate().compareTo(creationDate) < 0)
+				beg = mid + 1;
+			else
+				end = mid - 1;
+		}
+		
+		return ret;
+	}
+	
+	public String binaryClubSearchType(String type, int beg, int end) {
+		
+		orderByType();
+		
+		String ret = "";
+		
+		boolean found = false;
+		
+		while (!found && beg <= end) {
+			
+			int mid = (beg + end) / 2;
+			
+			if (clubs.get(mid).getType().equals(type)) {
+				found = true;
+				ret += clubs.get(mid).showInfo();
+				
+			}
+			if (clubs.get(mid).getType().compareTo(type) < 0)
+				beg = mid + 1;
+			else
+				end = mid - 1;
+		}
+		
+		return ret;
+	}
+	
+	public String clubSearchName(String name) {
+		
+		String ret = "";
+		
+		boolean found = false;
+		
+		for(int i = 0; i < clubs.size() && !found; i++) {
+			if(clubs.get(i).getName().equals(name)) {
+				ret += clubs.get(i).showInfo();
+				found = true;
+			}
+		}
+		
+		return ret;
+		
+	}
+	
+	public String clubSearchId(String id) {
+		
+		String ret = "";
+		
+		boolean found = false;
+		
+		for(int i = 0; i < clubs.size() && !found; i++) {
+			if(clubs.get(i).getId().equals(id)) {
+				ret += clubs.get(i).showInfo();
+				found = true;
+			}
+		}
+		
+		return ret;
+		
+	}
+	
+	public String clubSearchCreationDate(String creationDate) {
+		
+		String ret = "";
+		
+		boolean found = false;
+		
+		for(int i = 0; i < clubs.size() && !found; i++) {
+			if(clubs.get(i).getCreationDate().equals(creationDate)) {
+				ret += clubs.get(i).showInfo();
+				found = true;
+			}
+		}
+		
+		return ret;
+		
+	}
+	
+	public String clubSearchType(String type) {
+		
+		String ret = "";
+		
+		boolean found = false;
+		
+		for(int i = 0; i < clubs.size() && !found; i++) {
+			if(clubs.get(i).getType().equals(type)) {
+				ret += clubs.get(i).showInfo();
+				found = true;
+			}
+		}
+		
+		return ret;
+		
+	}
 }

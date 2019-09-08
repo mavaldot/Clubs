@@ -29,7 +29,8 @@ public class Menu {
 			System.out.println("2. Entrar a un club");
 			System.out.println("3. Agregar un club");
 			System.out.println("4. Eliminar un club");
-			System.out.println("5. Salir\n");
+			System.out.println("5. Buscar clubes");
+			System.out.println("6. Salir\n");
 			
 			int choice = askInt();
 			
@@ -41,13 +42,11 @@ public class Menu {
 				System.out.println("1. Ordenar por nombre");
 				System.out.println("2. Ordenar por ID");
 				System.out.println("3. Ordenar por fecha de creacion");
-				System.out.println("4. Ordenar por tipo");
+				System.out.println("4. Ordenar por tipo de mascota");
 				System.out.println("5. Ordenar por numero de duenos");
 				
 				int clubOrder = askInt();
-				
-				clubCollection.orderById();
-				
+
 				System.out.println(clubCollection.showClubList(clubOrder));
 				
 				break;
@@ -67,25 +66,8 @@ public class Menu {
 
 				String clubName = askString("Por favor digite el nombre del club");
 				String clubID = askString("Por favor digite el ID del club");
-			
-				int clubCreationYear = askInt("Por favor digite el ano en que se creo que club", 1000, 3000);
-				int clubCreationMonth = askInt("Por favor digite el mes del ano en que se creo que club", 1, 12);
-				int clubCreationDay = askInt("Por favor digite el dia del mes en que creo que club", 1, 31);
-				
-				String clubCreationDate = "";
-				
-				if (clubCreationMonth < 10)
-					clubCreationDate = clubCreationYear + "/" + "0" + clubCreationMonth;
-				else 
-					clubCreationDate = clubCreationYear + "/" + clubCreationMonth;
-				
-				if (clubCreationDay < 10)
-					clubCreationDate += "/" + "0" + clubCreationDay;
-				else
-					clubCreationDate += "/" + clubCreationDay;
-				
-				
-				String clubType = askString("Por favor digite el tipo de club");
+				String clubCreationDate = askDateWhen("se creo el club");
+				String clubType = askString("Por favor digite el tipo de mascotas del club");
 				
 				if (!clubCollection.findClub(clubID)) {
 					clubCollection.addClub(clubName, clubID, clubCreationDate, clubType);
@@ -113,13 +95,26 @@ public class Menu {
 				
 			case 5:
 				
-				running = false;
-				clubCollection.saveClubs();
-				System.out.println("Hasta luego!");
+				System.out.println("Por favor elija el criterio de busqueda");
+				System.out.println("1. Buscar por nombre");
+				System.out.println("2. Buscar por ID");
+				System.out.println("3. Buscar por fecha de creacion");
+				System.out.println("4. Buscar por tipo de mascota");
+				System.out.println("5. Buscar por numero de duenos");
+				
+				int criteria = askInt();
+				
+				String item = askString("Digite lo que esta buscando"); 
+				
+				System.out.println(clubCollection.searchClubs(criteria, item));
+				
 				break;
 				
 			case 6:
 				
+				running = false;
+				clubCollection.saveClubs();
+				System.out.println("Hasta luego!");
 				break;
 			
 			default:
@@ -130,16 +125,8 @@ public class Menu {
 			
 		}
 
-		
-//		Club c = new Club("JC1234", "JOHAN CLUB", "1 de enero", "Perros");
-//		c.save();
-//		
-//		c.addPetOwner("Johan", "Giraldo", "1234", "2005", "Perros");
-//		c.saveOwners();
-//		
-//		Club c2 = new Club("ARIZA4444", "ARIZA CLUB", "2 de enero", "Patos");
-//		c2.save();
 	}
+	
 	
 	public void clubMenu() {
 		
@@ -155,7 +142,8 @@ public class Menu {
 			System.out.println("2. Agregar un dueno");
 			System.out.println("3. Eliminar un dueno");
 			System.out.println("4. Entrar al menu de un dueno");
-			System.out.println("5. Salir del menu del club");
+			System.out.println("5. Buscar duenos");
+			System.out.println("6. Salir del menu del club");
 			System.out.println("");
 			
 			int choice = askInt();
@@ -174,7 +162,7 @@ public class Menu {
 				
 				int ownerOrder = askInt();
 				
-				System.out.println(clubCollection.showClubList(ownerOrder));
+				System.out.println(clubCollection.showOwnerList(ownerOrder));
 				
 				break;
 				
@@ -183,7 +171,7 @@ public class Menu {
 				String poNames = askString("Por favor digite los nombres");
 				String poLastNames = askString("Por favor digite los apellidos");
 				String poID = askString("Por favor digite el ID del dueno");
-				String poBirthDate = askString("Por favor digite la fecha de nacimiento del dueno");
+				String poBirthDate = askDateWhen("nacio el dueno");
 				String poPrefPetType = askString("Por favor digite el tipo preferido de mascota");
 				
 				if (!clubCollection.findOwner(poID)) {
@@ -198,6 +186,17 @@ public class Menu {
 				
 			case 3:
 				
+				String deleteId = askString("Por favor digite el ID del dueno");
+				
+				if(clubCollection.deleteOwner(deleteId)) 
+					System.out.println("El dueno ha sido borrado exitosamente");
+				else
+					System.out.println("No se encontro un dueno con ese ID");
+				
+				break;
+				
+			case 4:
+				
 				String id = askString("Por favor digite el ID del dueno");
 				
 				if (clubCollection.selectPetOwner(id)) 
@@ -207,15 +206,27 @@ public class Menu {
 					
 				break;
 				
-			case 4:
-				
-				break;	
-				
 			case 5:
 			
+				System.out.println("Por favor elija el criterio de busqueda");
+				System.out.println("1. Buscar por nombre");
+				System.out.println("2. Buscar por ID");
+				System.out.println("3. Buscar por fecha de creacion");
+				System.out.println("4. Buscar por tipo de mascota");
+				System.out.println("5. Buscar por numero de duenos");
+				
+				int criteria = askInt();
+				
+				String item = askString("Digite lo que esta buscando"); 
+				
+				System.out.println(clubCollection.searchClubs(criteria, item));
+
+				break;
+
+			case 6:
 				exit = true;
 				break;
-			
+				
 			default:
 				System.out.println("ERROR. Digite una opcion valida");
 					
@@ -238,7 +249,8 @@ public class Menu {
 			System.out.println("2. Agregar una mascota ");
 			System.out.println("3. Eliminar una mascota");
 			System.out.println("4. Buscar una mascota");
-			System.out.println("5. Salir del menu del club");
+			System.out.println("5. Buscar mascotas");
+			System.out.println("6. Salir del menu del dueno");
 			
 			int choice = askInt();
 			
@@ -248,11 +260,15 @@ public class Menu {
 				
 				System.out.println("Por favor elija el criterio de ordenamiento");
 				System.out.println("1. Ordenar por el nombre");
-				System.out.println("2. Ordenar por el apellido");
-				System.out.println("3. Ordenar por el id");
-				System.out.println("4. Ordenar por la fecha de nacimiento");
-				System.out.println("5. Ordenar por el tipo preferido de mascota");
+				System.out.println("2. Ordenar por el id");
+				System.out.println("3. Ordenar por la fecha de nacimiento");
+				System.out.println("4. Ordenar por el genero");
+				System.out.println("5. Ordenar por el tipo de mascota");
 				System.out.println("");
+				
+				int petOrder = askInt();
+				
+				System.out.println(clubCollection.showPetList(petOrder));
 				
 				break;
 				
@@ -260,8 +276,9 @@ public class Menu {
 				
 				String pName = askString("Por favor digite el nombre de la mascota");
 				String pID = askString("Por favor digite el ID de la mascota");
-				String pBirthDate = askString("Por favor digite la fecha de nacimiento de la mascota");
-				String pGender = askString("Por favor digite el genero de la mascota");
+				String pBirthDate = askDateWhen("nacio la mascota (si no se la sabe ponga una aproximacion)");
+				int genderStr = askInt("Por favor elija el genero de la mascota. Opciones:\n1. M\n2. F\n", 1, 2);
+				String pGender = genderStr == 1 ? "M" : "F";		
 				String pType = askString("Por favor digite el tipo de la mascota");
 				
 				clubCollection.addPet(pName, pID, pBirthDate, pGender, pType);
@@ -270,12 +287,12 @@ public class Menu {
 				
 			case 3:
 				
-				String delID = askString("Por favor digite el ID de la mascota");
+				String delName = askString("Por favor digite el nombre de la mascota");
 				
-				if (clubCollection.deletePet(delID))
+				if (clubCollection.deletePet(delName))
 					System.out.println("La mascota ha sido eliminada exitosamente");
 				else
-					System.out.println("No se encontro una mascota con ese ID");
+					System.out.println("No se encontro una mascota con ese nombre");
 				
 				break;
 				
@@ -287,6 +304,23 @@ public class Menu {
 				break;
 				
 			case 5:
+				
+				System.out.println("Por favor elija el criterio de busqueda");
+				System.out.println("1. Buscar por nombre");
+				System.out.println("2. Buscar por ID");
+				System.out.println("3. Buscar por fecha de creacion");
+				System.out.println("4. Buscar por tipo de mascota");
+				System.out.println("5. Buscar por numero de duenos");
+				
+				int criteria = askInt();
+				
+				String item = askString("Digite lo que esta buscando"); 
+				
+				System.out.println(clubCollection.searchClubs(criteria, item));
+				
+				break;
+				
+			case 6:
 				
 				exit = true;
 				break;
@@ -308,7 +342,7 @@ public class Menu {
 			String ans = s.nextLine();
 			ret = Integer.parseInt(ans);
 		}
-		catch (NumberFormatException nfe){
+		catch (NumberFormatException nfe) {
 			System.out.println("ERROR. Por favor digite un NUMERO");
 		}
 		
@@ -334,7 +368,7 @@ public class Menu {
 		int ret = 0;
 		boolean success = false;
 		
-		while(!success) {
+		while (!success) {
 			
 			try {
 				
@@ -360,6 +394,27 @@ public class Menu {
 		System.out.println(msg);
 		String ret = s.nextLine();
 		return ret;
+	}
+	
+	public String askDateWhen(String str) {
+	
+		int year = askInt("Por favor digite el ano en que " + str, 1000, 3000);
+		int month = askInt("Por favor digite el mes del ano en que " + str, 1, 12);
+		int day = askInt("Por favor digite el dia del mes en que " + str, 1, 31);
+		
+		String date = "";
+		
+		if (month < 10)
+			date = year + "/" + "0" + month;
+		else 
+			date = year + "/" + month;
+		
+		if (day < 10)
+			date += "/" + "0" + day;
+		else
+			date += "/" + day;
+		
+		return date;
 	}
 	
 }
