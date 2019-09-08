@@ -8,14 +8,26 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+enum ClubOrder {
+	NAME,
+	ID,
+	CREATIONDATE,
+	TYPE,
+	NONE;
+}
+
 public class ClubCollection {
 	
 	private ArrayList<Club> clubs;
 	private Club selectedClub;
 	private PetOwner selectedPetOwner;
+	ClubOrder order;
 	
 	public ClubCollection() {
 		clubs = new ArrayList<Club>();
+		selectedClub = null;
+		selectedPetOwner = null;
+		order = ClubOrder.NONE;
 	}
 	
 	public void saveClubs() {
@@ -32,7 +44,7 @@ public class ClubCollection {
 			out.close();
 		}
 		catch (FileNotFoundException e) {
-			
+			//e.printStackTrace();
 		}
 	}
 	
@@ -61,6 +73,7 @@ public class ClubCollection {
 				clubs.add(new Club(data[0], data[1], data[2], data[3]));
 			}
 			
+			br.close();
 		}
 		catch (FileNotFoundException e) {
 			//e.printStackTrace();
@@ -80,6 +93,7 @@ public class ClubCollection {
 	
 	public void addClub(String id, String name, String creationDate, String type) {
 		clubs.add(new Club(id, name, creationDate, type));
+		order = ClubOrder.NONE;
 		saveClubs();
 	}
 	
@@ -167,50 +181,88 @@ public class ClubCollection {
 		return msg;
 	}
 	
-	
-	
-	public boolean load() {
+	public String showClubList(int clubOrder) {
 		
-		boolean success = false;
-		File res = new File("res\\clubs");
+		String ret = "";
+		boolean error = false;
 		
-		if (!res.exists()) {
-			res.mkdirs();
-		}
-		else {
-
-			File[] resFiles = res.listFiles();
+		switch (clubOrder) {
+		
+		case 1:
 			
-			if (resFiles != null) {
-				for (File child : resFiles) {
-					try {
-						BufferedReader br = new BufferedReader(new FileReader(child));
-						String id = br.readLine();
-						String name = br.readLine();
-						String creationDate = br.readLine();
-						String type = br.readLine();
-						
-						addClub(id, name, creationDate, type);
-						success = true;
-						
-					}
-					catch ( IOException e) {
+			
+			break;
+			
+		case 2:
+			
+			break;
+		
+		case 3:
+			
+			break;
+			
+		case 4:
+			
+			break;
+		
+		default:
+			error = true;
+			break;
+		}
+		
+		if(!error) {
+			ret += "\nLISTA DE CLUBES:\n";
+			for (Club c : clubs) {
+				
+				ret += "* " + c.getData() + "\n";
+			}
+		} 
+		else {
+			ret = "Error. Ha digitado un numero erroneo.";
+		}
 
-					}
+		
+		return ret;
+		
+	}
+	
+	//insertion sort
+	public void orderByName() {
+		
+		if (order != ClubOrder.NAME) {
+			
+			for(int i = 1; i < clubs.size(); i++) {
+				for(int j = i - 1; j >= 0 && clubs.get(j).compareTo(clubs.get(j+1)) > 0; j--) {
+					Club tmp = clubs.get(j);
+					clubs.set(j, clubs.get(j+1));
+					clubs.set(j+1, tmp);
 				}
 			}
 			
+			order = ClubOrder.NAME;
 		}
-		
-		for (Club c : clubs) {
-			System.out.println(c.toString());
-		}
-		
-		return success;
 		
 	}
 	
 	
-	
+	public void orderById() {
+		
+		if (order != ClubOrder.ID) {
+			
+			for(int i = 0; i < clubs.size() - 1; i++) {
+				for(int j = 0; j < clubs.size() - i - 1; j++) {
+					if(clubs.get(j).compare(clubs.get(j), clubs.get(j+1)) > 0) {
+						Club tmp = clubs.get(j);
+						clubs.set(j, clubs.get(j+1));
+						clubs.set(j+1, tmp);
+					}
+				}
+				
+			}
+			
+			order = ClubOrder.ID;		
+		}
+		
+	}
 	
 }

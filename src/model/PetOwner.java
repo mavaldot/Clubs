@@ -34,8 +34,29 @@ public class PetOwner implements Serializable, Comparable<PetOwner>, Comparator<
 		pets = new ArrayList<Pet>();
 	}
 	
-	public String getID() {
+	
+	public String getNames() {
+		return names;
+	}
+
+	public String getLastNames() {
+		return lastNames;
+	}
+	
+	public String getId() {
 		return id;
+	}
+
+	public String getBirthDate() {
+		return birthDate;
+	}
+	
+	public String getPrefPetType() {
+		return prefPetType;
+	}
+
+	public ArrayList<Pet> getPets() {
+		return pets;
 	}
 	
 	public String showInfo() {
@@ -91,17 +112,35 @@ public class PetOwner implements Serializable, Comparable<PetOwner>, Comparator<
 	@Override
 	public int compareTo(PetOwner po) {
 		
-		int ret = id.compareTo(po.getID());
+		int ret = names.compareToIgnoreCase(po.getNames());
 		
 		return ret;
 	}
 	
+	public int compareLastNames(PetOwner po) {
+		
+		int ret = lastNames.compareToIgnoreCase(po.getLastNames());
+		return ret;
+	}
+
+
 	@Override
 	public int compare(PetOwner o1, PetOwner o2) {
 		
+		int ret = o1.getId().compareToIgnoreCase(o2.getId());
+		return ret;
+	}
+	
+	public int compareBirthDate(PetOwner po) {
 		
-		
-		return 0;
+		int ret = birthDate.compareToIgnoreCase(po.getBirthDate());
+		return ret;
+	}
+	
+	public int comparePrefPetType(PetOwner po) {
+	
+		int ret = prefPetType.compareToIgnoreCase(po.getPrefPetType());
+		return ret;
 	}
 
 

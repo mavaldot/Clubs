@@ -1,15 +1,7 @@
 package ui;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Scanner;
-
-import model.Club;
 import model.ClubCollection;
-import model.ClubNotFoundException;
-import model.PetOwner;
 
 public class Menu {
 
@@ -49,7 +41,13 @@ public class Menu {
 				System.out.println("2. Ordenar por ID");
 				System.out.println("3. Ordenar por fecha de creacion");
 				System.out.println("4. Ordenar por tipo");
-				System.out.println("5. No ordenar");
+				System.out.println("5. Ordenar por numero de duenos");
+				
+				int clubOrder = askInt();
+				
+				clubCollection.orderById();
+				
+				System.out.println(clubCollection.showClubList(clubOrder));
 				
 				break;
 				
@@ -65,14 +63,14 @@ public class Menu {
 				break;
 				
 			case 3:
-				
-				String clubID = askString("Por favor digite el ID del club");
+
 				String clubName = askString("Por favor digite el nombre del club");
+				String clubID = askString("Por favor digite el ID del club");
 				String clubCreationDate = askString("Por favor digite la fecha que se creo el club");
 				String clubType = askString("Por favor digite el tipo de club");
 				
 				if (!clubCollection.findClub(clubID)) {
-					clubCollection.addClub(clubID, clubName, clubCreationDate, clubType);
+					clubCollection.addClub(clubName, clubID, clubCreationDate, clubType);
 					System.out.println("Su club ha sido agregado!");
 				} 
 				else {
@@ -80,6 +78,8 @@ public class Menu {
 				}
 				
 				clubCollection.saveClubs();
+				
+				clubCollection.orderByName();
 				
 				
 				break;
@@ -156,7 +156,7 @@ public class Menu {
 				
 				int ownerOrder = askInt();
 				
-				
+				System.out.println(clubCollection.showClubList(ownerOrder));
 				
 				break;
 				

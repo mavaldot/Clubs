@@ -58,16 +58,34 @@ public class Pet implements Serializable, Comparable<Pet>, Comparator<Pet>{
 
 	@Override
 	public int compare(Pet o1, Pet o2) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		int ret = o1.getId().compareToIgnoreCase(o2.getId());
+		return ret;
 	}
 
 
 
 	@Override
-	public int compareTo(Pet o) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int compareTo(Pet p) {
+
+		int ret = name.compareToIgnoreCase(p.getName());
+		return ret;
+	}
+	
+	public int compareBirthDate(Pet p) {
+		
+		int ret = birthDate.compareToIgnoreCase(p.getBirthDate());
+		return ret;
+	}
+	
+	public int compareGender(Pet p) {
+		int ret = gender.compareToIgnoreCase(p.getGender());
+		return ret;
+	}
+	
+	public int compareType(Pet p) {
+		int ret = type.compareToIgnoreCase(p.getType());
+		return ret;
 	}
 	
 	

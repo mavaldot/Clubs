@@ -11,23 +11,23 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-enum OwnerOrder {
+enum PetOwnerOrder {
 	NONE;
 }
 
 public class Club implements Comparable<Club>, Comparator<Club> {
 
-	private String id;
 	private String name;
+	private String id;
 	private String creationDate;
 	private String type;
 	
 	private ArrayList<PetOwner> petOwners;
 	
-	public Club(String id, String name, String creationDate, String type)  {
+	public Club(String name, String id, String creationDate, String type)  {
 		
-		this.id = id;
 		this.name = name;
+		this.id = id;
 		this.creationDate = creationDate;
 		this.type = type;
 		
@@ -146,7 +146,7 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 		boolean found = false;
 		
 		for (PetOwner po : petOwners) {
-			if(po.getID().equals(id)) {
+			if(po.getId().equals(id)) {
 				found = true;
 			}
 		}
@@ -160,7 +160,7 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 		PetOwner retPO = null;
 		
 		for(PetOwner po : petOwners) {
-			if(po.getID().equals(id)) {
+			if(po.getId().equals(id)) {
 				retPO = po;
 			}
 		}
@@ -172,7 +172,7 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 	@Override
 	public int compareTo(Club c) {
 		
-		int ret = name.compareTo(c.getName());
+		int ret = name.compareToIgnoreCase(c.getName());
 		
 		return ret;
 	}
@@ -180,14 +180,14 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 	@Override
 	public int compare(Club o1, Club o2) {
 		
-		int ret = o1.getName().compareTo(o2.getName());
+		int ret = o1.getId().compareToIgnoreCase(o2.getId());
 		
 		return ret;
 	}
 	
 	public int compareCreationDate(Club c) {
 		
-		int ret = creationDate.compareTo(c.getCreationDate());
+		int ret = creationDate.compareToIgnoreCase(c.getCreationDate());
 		
 		return ret;
 		
@@ -195,7 +195,7 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 	
 	public int compareType(Club c) {
 		
-		int ret = type.compareTo(c.getCreationDate());
+		int ret = type.compareToIgnoreCase(c.getCreationDate());
 		
 		return ret;
 	}
