@@ -2,7 +2,6 @@ package model;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -187,7 +186,7 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 	
 	public int compareCreationDate(Club c) {
 		
-		int ret = creationDate.compareToIgnoreCase(c.getCreationDate());
+		int ret = creationDate.compareTo(c.getCreationDate());
 		
 		return ret;
 		

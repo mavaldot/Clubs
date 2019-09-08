@@ -13,6 +13,7 @@ enum ClubOrder {
 	ID,
 	CREATIONDATE,
 	TYPE,
+	NUMBEROFPETOWNERS,
 	NONE;
 }
 
@@ -67,8 +68,6 @@ public class ClubCollection {
 			while ( (next=br.readLine()) != null) {
 				
 				String[] data = next.split(",");
-				
-				System.out.println(data[0] + data[1] + data[2] + data[3]);
 				
 				clubs.add(new Club(data[0], data[1], data[2], data[3]));
 			}
@@ -190,32 +189,45 @@ public class ClubCollection {
 		
 		case 1:
 			
-			
+			orderByName();
 			break;
 			
 		case 2:
 			
+			orderById();
 			break;
 		
 		case 3:
 			
+			orderByCreationDate();
 			break;
 			
 		case 4:
 			
+			orderByType();
 			break;
 		
+		case 5:
+			
+			orderByNumberOfPetOwners();
+			break;
+			
 		default:
 			error = true;
 			break;
 		}
 		
-		if(!error) {
-			ret += "\nLISTA DE CLUBES:\n";
-			for (Club c : clubs) {
+		if (!error) {
+			ret += "\nLISTA DE CLUBES:\n\n";
+
+			for(int i = 0; i < clubs.size(); i++) {
 				
-				ret += "* " + c.getData() + "\n";
+				ret += "Club #" + (i+1) + "\n";
+				ret += clubs.get(i).showInfo();
+				ret += "\n";
+				
 			}
+			
 		} 
 		else {
 			ret = "Error. Ha digitado un numero erroneo.";
@@ -225,7 +237,8 @@ public class ClubCollection {
 		return ret;
 		
 	}
-	
+
+
 	//insertion sort
 	public void orderByName() {
 		
@@ -261,6 +274,62 @@ public class ClubCollection {
 			}
 			
 			order = ClubOrder.ID;		
+		}
+		
+	}
+	
+	public void orderByCreationDate() {
+		
+		if (order != ClubOrder.CREATIONDATE) {
+			
+			for (int i = 0; i < clubs.size() - 1; i++) {
+				
+				Club min = clubs.get(i);
+				boolean change = false;
+				
+				int pos = 0;
+				
+				for (int j = i + 1; j < clubs.size(); j++) {	
+					if (min.compareCreationDate(clubs.get(j)) > 0) {
+						min = clubs.get(j);
+						pos = j;
+						System.out.println("cambio " + min.getData());
+						change = true;
+					}		
+				}
+				
+				if (change) {
+					Club tmp = min;
+					clubs.set(i, min);
+					clubs.set(pos, tmp);
+				}
+			}
+			
+			order = ClubOrder.CREATIONDATE;
+		}
+		
+	}
+
+	public void orderByType() {
+		
+		if (order != ClubOrder.TYPE) {
+			
+			
+			order = ClubOrder.TYPE;
+		}
+	}
+
+
+	
+	public void orderByNumberOfPetOwners() {
+
+		if (order != ClubOrder.NUMBEROFPETOWNERS) {
+			
+			for(;;) {
+				break;
+			}
+			
+			order = ClubOrder.NUMBEROFPETOWNERS;
 		}
 		
 	}

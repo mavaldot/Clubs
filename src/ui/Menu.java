@@ -11,6 +11,7 @@ public class Menu {
 	public Menu() {
 		clubCollection = new ClubCollection();
 		s = new Scanner(System.in);
+		
 	}
 	
 	public void mainMenu() {
@@ -66,7 +67,24 @@ public class Menu {
 
 				String clubName = askString("Por favor digite el nombre del club");
 				String clubID = askString("Por favor digite el ID del club");
-				String clubCreationDate = askString("Por favor digite la fecha que se creo el club");
+			
+				int clubCreationYear = askInt("Por favor digite el ano en que se creo que club", 1000, 3000);
+				int clubCreationMonth = askInt("Por favor digite el mes del ano en que se creo que club", 1, 12);
+				int clubCreationDay = askInt("Por favor digite el dia del mes en que creo que club", 1, 31);
+				
+				String clubCreationDate = "";
+				
+				if (clubCreationMonth < 10)
+					clubCreationDate = clubCreationYear + "/" + "0" + clubCreationMonth;
+				else 
+					clubCreationDate = clubCreationYear + "/" + clubCreationMonth;
+				
+				if (clubCreationDay < 10)
+					clubCreationDate += "/" + "0" + clubCreationDay;
+				else
+					clubCreationDate += "/" + clubCreationDay;
+				
+				
 				String clubType = askString("Por favor digite el tipo de club");
 				
 				if (!clubCollection.findClub(clubID)) {
@@ -310,6 +328,33 @@ public class Menu {
 		
 		return ret;
 	}
+	
+	public int askInt(String msg, int min, int max) {
+		System.out.println(msg);
+		int ret = 0;
+		boolean success = false;
+		
+		while(!success) {
+			
+			try {
+				
+				String ans = s.nextLine();
+				ret = Integer.parseInt(ans);
+				
+				if (ret < min || ret > max)
+					System.out.println("ERROR. Por favor digite un numero entre " + min + " y " + max);
+				else
+					success = true;
+					
+			} 
+			catch (NumberFormatException nfe) {
+				System.out.println("ERROR. Por favor digite un NUMERO");
+			}
+		}
+		
+		return ret;
+	}
+	
 	
 	public String askString(String msg) {
 		System.out.println(msg);
