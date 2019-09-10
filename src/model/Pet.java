@@ -46,7 +46,7 @@ public class Pet implements Serializable, Comparable<Pet>, Comparator<Pet>{
 		info += "ID: " + id + "\n";
 		info += "Fecha de nacimiento: " + birthDate + "\n";
 		info += "Genero: " + gender + "\n";
-		info += "Tipo: " + type + "\n";
+		info += "Tipo: " + type + "\n\n";
 	
 		return info;
 		
@@ -85,6 +85,7 @@ public class Pet implements Serializable, Comparable<Pet>, Comparator<Pet>{
 		int ret = type.compareToIgnoreCase(p.getType());
 		return ret;
 	}
+	
 	
 	
 }

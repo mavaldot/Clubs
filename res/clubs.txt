@@ -1,4 +1,5 @@
-Ariza Club,3446455,2000/10/01,Gatos
-Johan,1234,1999/12/01,Perros
 Johan Club,1,1999/01/01,Patos
+Johan,1234,1999/12/01,Perros
+Johan,1242,1999/01/12,Perros
 Juan Club,32553,1999/04/04,Hamsters
+Ariza Club,3446455,2000/10/01,Gatos

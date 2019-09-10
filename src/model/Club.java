@@ -67,7 +67,7 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 		info += "ID: " + id + "\n";
 		info += "Fecha de creacion: " + creationDate + "\n";
 		info += "Tipo de mascota: " + type + "\n";
-		info += "Numero de miembros: " + petOwners.size() + "\n";
+		info += "Numero de miembros: " + petOwners.size() + "\n\n";
 		
 		return info;
  	}
@@ -234,7 +234,6 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 				
 				ret += "Dueno #" + (i+1) + "\n";
 				ret += petOwners.get(i).showInfo();
-				ret += "\n";
 				
 			}
 			
@@ -386,18 +385,392 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 		return found;
 	}
 	
-	public String searchPetOwner(int criteria, String item) {
+	public String searchOwners(int criteria, String item) {
 		
 		String result = "";
 		
 		switch (criteria) {
 		
-		
+		case 1:
+			
+			orderByName();
+			
+			long t1name = System.nanoTime();
+			result += petOwnersBinarySearchName(item, 0, petOwners.size()-1) + "\n";
+			result += "Tiempo busqueda binaria: " + (System.nanoTime() - t1name) + " nanosegundos\n"; 
+			
+			long t2name = System.nanoTime();
+			petOwnersSearchName(item);
+			result += "Tiempo busqueda secuencial: " + (System.nanoTime() - t2name) + " nanosegundos\n"; 
+			
+			break;
+			
+		case 2:
+			
+			orderByLastName();
+			
+			long t1lname = System.nanoTime();
+			result += petOwnersBinarySearchLastName(item, 0, petOwners.size()-1) + "\n";
+			result += "Tiempo busqueda binaria: " + (System.nanoTime() - t1lname) + " nanosegundos\n";  
+			
+			long t2lname = System.nanoTime();
+			petOwnersSearchLastName(item);
+			result += "Tiempo busqueda secuencial: " + (System.nanoTime() - t2lname) + " nanosegundos\n"; 
+			
+			break;
+			
+		case 3:
+			
+			orderById();
+			
+			long t1id = System.nanoTime();
+			result += petOwnersBinarySearchId(item, 0, petOwners.size()-1) + "\n";
+			result += "Tiempo busqueda binaria: " + (System.nanoTime() - t1id) + " nanosegundos\n";  
+			
+			long t2id = System.nanoTime();
+			petOwnersSearchId(item);
+			result += "Tiempo busqueda secuencial: " + (System.nanoTime() - t2id) + " nanosegundos\n"; 
+
+			break;
+			
+		case 4:
+			
+			orderByBirthDate();
+			
+			long t1bd = System.nanoTime();
+			result += petOwnersBinarySearchBirthDate(item, 0, petOwners.size()-1) + "\n";
+			result += "Tiempo busqueda binaria: " + (System.nanoTime() - t1bd) + " nanosegundos\n"; 
+			
+			long t2bd = System.nanoTime();
+			petOwnersSearchBirthDate(item);
+			result += "Tiempo busqueda secuencial: " + (System.nanoTime() - t2bd) + " nanosegundos\n"; 
+			break;
+			
+		case 5:
+			
+			orderByPrefPetType();
+			
+			long t1ppt = System.nanoTime();
+			result += petOwnersBinarySearchPrefPetType(item, 0, petOwners.size()-1) + "\n";
+			result += "Tiempo busqueda binaria: " + (System.nanoTime() - t1ppt) + " nanosegundos\n"; 
+			
+			long t2ppt = System.nanoTime();
+			petOwnersSearchPrefPetType(item);
+			result += "Tiempo busqueda secuencial: " + (System.nanoTime() - t2ppt) + " nanosegundos\n"; 
+			break;
+			
+		default:
+			
+			result = "ERROR. Ha introducido un criterio de busqueda invalido.";
+			break;
 		
 		}
 		
 		return result;
-		
 	}
 	
+	public String petOwnersBinarySearchName(String names, int beg, int end) {
+		
+		String ret = "";
+		
+		boolean found = false;
+		
+		while (!found && beg <= end) {
+			
+			int mid = (beg + end) / 2;
+			
+			if (petOwners.get(mid).getNames().equals(names)) {
+				found = true;
+				ret += petOwners.get(mid).showInfo();
+				
+				int i = mid;
+				
+				while (++mid <= end && petOwners.get(mid).getNames().equals(names)) {
+					ret += petOwners.get(mid).showInfo();
+				}
+				
+				while (--i >= beg && petOwners.get(i).getNames().equals(names)) {
+					ret += petOwners.get(i).showInfo();
+				}	
+				
+			}
+			else if (petOwners.get(mid).getNames().compareTo(names) < 0)
+				beg = mid + 1;
+			else
+				end = mid - 1;
+		}
+		
+		if(!found) {
+			ret = "No se encontro un dueno con ese nombre\n";
+		}
+		
+		return ret;
+	}
+	
+	public String petOwnersBinarySearchLastName(String lastnames, int beg, int end) {
+		
+		String ret = "";
+		
+		boolean found = false;
+		
+		while (!found && beg <= end) {
+			
+			int mid = (beg + end) / 2;
+			
+			if (petOwners.get(mid).getLastNames().equals(lastnames)) {
+				found = true;
+				ret += petOwners.get(mid).showInfo();
+				
+				int i = mid;
+				
+				while (++mid <= end && petOwners.get(mid).getLastNames().equals(lastnames)) {
+					ret += petOwners.get(mid).showInfo();
+				}
+				
+				while (--i >= beg && petOwners.get(i).getLastNames().equals(lastnames)) {
+					ret += petOwners.get(i).showInfo();
+				}	
+				
+			}
+			else if (petOwners.get(mid).getLastNames().compareTo(lastnames) < 0)
+				beg = mid + 1;
+			else
+				end = mid - 1;
+		}
+		
+		if(!found) {
+			ret = "No se encontro un dueno con ese apellido\n";
+		}
+		
+		return ret;
+	}
+	
+	public String petOwnersBinarySearchId(String poid, int beg, int end) {
+		
+		String ret = "";
+		
+		boolean found = false;
+		
+		while (!found && beg <= end) {
+			
+			int mid = (beg + end) / 2;
+			
+			if (petOwners.get(mid).getId().equals(poid)) {
+				found = true;
+				ret += petOwners.get(mid).showInfo();
+				
+				int i = mid;
+				
+			}
+			else if (petOwners.get(mid).getId().compareTo(poid) < 0)
+				beg = mid + 1;
+			else
+				end = mid - 1;
+		}
+		
+		if(!found) {
+			ret = "No se encontro un dueno con ese id\n";
+		}
+		
+		return ret;
+	}
+	
+	public String petOwnersBinarySearchBirthDate(String birthDate, int beg, int end) {
+		
+		String ret = "";
+		
+		boolean found = false;
+		
+		while (!found && beg <= end) {
+			
+			int mid = (beg + end) / 2;
+			
+			if (petOwners.get(mid).getBirthDate().equals(birthDate)) {
+				found = true;
+				ret += petOwners.get(mid).showInfo();
+				
+				int i = mid;
+				
+				while (++mid <= end && petOwners.get(mid).getBirthDate().equals(birthDate)) {
+					ret += petOwners.get(mid).showInfo();
+				}
+				
+				while (--i >= beg && petOwners.get(i).getBirthDate().equals(birthDate)) {
+					ret += petOwners.get(i).showInfo();
+				}	
+				
+			}
+			else if (petOwners.get(mid).getBirthDate().compareTo(birthDate) < 0)
+				beg = mid + 1;
+			else
+				end = mid - 1;
+		}
+		
+		if(!found) {
+			ret = "No se encontro un dueno con esa fecha de nacimiento\n";
+		}
+		
+		return ret;
+	}
+	
+	public String petOwnersBinarySearchPrefPetType(String prefPetType, int beg, int end) {
+		
+		String ret = "";
+		
+		boolean found = false;
+		
+		while (!found && beg <= end) {
+			
+			int mid = (beg + end) / 2;
+			
+			if (petOwners.get(mid).getPrefPetType().equals(prefPetType)) {
+				found = true;
+				ret += petOwners.get(mid).showInfo();
+				
+				int i = mid;
+				
+				while (++mid <= end && petOwners.get(mid).getPrefPetType().equals(prefPetType)) {
+					ret += petOwners.get(mid).showInfo();
+				}
+				
+				while (--i >= beg && petOwners.get(i).getPrefPetType().equals(prefPetType)) {
+					ret += petOwners.get(i).showInfo();
+				}	
+				
+			}
+			else if (petOwners.get(mid).getPrefPetType().compareTo(prefPetType) < 0)
+				beg = mid + 1;
+			else
+				end = mid - 1;
+		}
+		
+		if(!found) {
+			ret = "No se encontro un dueno con ese tipo de mascota preferido\n";
+		}
+		
+		return ret;
+	}
+	
+	
+	
+	public String petOwnersSearchName(String poName) {
+		
+		String ret = "";
+		
+		boolean found = false;
+		
+		for(int i = 0; i < petOwners.size() && !found; i++) {
+			if(petOwners.get(i).getNames().equals(poName)) {
+				ret += petOwners.get(i).showInfo();
+				found = true;
+				
+				while(++i <= petOwners.size()-1 && petOwners.get(i).getNames().equals(poName)) {
+					ret += petOwners.get(i).showInfo();
+				}
+				
+			}	
+		}
+		
+		if(!found) {
+			ret = "No se encontro un dueno con ese nombre\n";
+		}
+		
+		return ret;
+	}
+	
+	public String petOwnersSearchLastName(String poLastName) {
+		
+		String ret = "";
+		
+		boolean found = false;
+		
+		for(int i = 0; i < petOwners.size() && !found; i++) {
+			if(petOwners.get(i).getLastNames().equals(poLastName)) {
+				ret += petOwners.get(i).showInfo();
+				found = true;
+				
+				while(++i <= petOwners.size()-1 && petOwners.get(i).getLastNames().equals(poLastName)) {
+					ret += petOwners.get(i).showInfo();
+				}
+				
+			}	
+		}
+		
+		if(!found) {
+			ret = "No se encontro un dueno con ese apellido\n";
+		}
+		
+		return ret;
+	}
+
+	public String petOwnersSearchId(String poid) {
+		
+		String ret = "";
+		
+		boolean found = false;
+		
+		for(int i = 0; i < petOwners.size() && !found; i++) {
+			if(petOwners.get(i).getId().equals(poid)) {
+				ret += petOwners.get(i).showInfo();
+				found = true;
+				
+			}	
+		}
+		
+		if(!found) {
+			ret = "No se encontro un dueno con ese id\n";
+		}
+		
+		return ret;
+	}
+	
+	public String petOwnersSearchBirthDate(String bd) {
+		
+		String ret = "";
+		
+		boolean found = false;
+		
+		for(int i = 0; i < petOwners.size() && !found; i++) {
+			if(petOwners.get(i).getBirthDate().equals(bd)) {
+				ret += petOwners.get(i).showInfo();
+				found = true;
+				
+				while(++i <= petOwners.size()-1 && petOwners.get(i).getBirthDate().equals(bd)) {
+					ret += petOwners.get(i).showInfo();
+				}
+				
+			}	
+		}
+		
+		if(!found) {
+			ret = "No se encontro un dueno con esa fecha de nacimiento\n";
+		}
+		
+		return ret;
+	}
+	
+	public String petOwnersSearchPrefPetType(String ppt) {
+		
+		String ret = "";
+		
+		boolean found = false;
+		
+		for(int i = 0; i < petOwners.size() && !found; i++) {
+			if(petOwners.get(i).getPrefPetType().equals(ppt)) {
+				ret += petOwners.get(i).showInfo();
+				found = true;
+				
+				while(++i <= petOwners.size()-1 && petOwners.get(i).getPrefPetType().equals(ppt)) {
+					ret += petOwners.get(i).showInfo();
+				}
+				
+			}	
+		}
+		
+		if(!found) {
+			ret = "No se encontro un dueno con ese tipo de mascota preferido\n";
+		}
+		
+		return ret;
+	}
 }

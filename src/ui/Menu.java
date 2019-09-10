@@ -23,7 +23,7 @@ public class Menu {
 		
 		while (running) {
 			
-			System.out.println("\nBienvenido al menu principal! Elija una opcion:");
+			System.out.println("\nBienvenido al menu principal! Por favor elija una opcion:");
 
 			System.out.println("1. Ver la lista de los clubes");
 			System.out.println("2. Entrar a un club");
@@ -119,7 +119,7 @@ public class Menu {
 			
 			default:
 				
-				System.out.println("ERROR. Por favor digite un valor valido");	
+				System.out.println("Por favor digite un valor valido");	
 				break;
 			}
 			
@@ -209,17 +209,17 @@ public class Menu {
 			case 5:
 			
 				System.out.println("Por favor elija el criterio de busqueda");
-				System.out.println("1. Buscar por nombre");
-				System.out.println("2. Buscar por ID");
-				System.out.println("3. Buscar por fecha de creacion");
-				System.out.println("4. Buscar por tipo de mascota");
-				System.out.println("5. Buscar por numero de duenos");
+				System.out.println("1. Buscar por nombres");
+				System.out.println("2. Buscar por apellidos");
+				System.out.println("3. Buscar por id");
+				System.out.println("4. Buscar por fecha de nacimiento");
+				System.out.println("5. Buscar por tipo de mascota preferido");
 				
 				int criteria = askInt();
 				
 				String item = askString("Digite lo que esta buscando"); 
 				
-				System.out.println(clubCollection.searchClubs(criteria, item));
+				System.out.println(clubCollection.searchOwners(criteria, item));
 
 				break;
 
@@ -228,7 +228,7 @@ public class Menu {
 				break;
 				
 			default:
-				System.out.println("ERROR. Digite una opcion valida");
+				System.out.println("Por favor digite una opcion valida");
 					
 				
 			}
@@ -248,9 +248,8 @@ public class Menu {
 			System.out.println("1. Ver la lista de mascotas");
 			System.out.println("2. Agregar una mascota ");
 			System.out.println("3. Eliminar una mascota");
-			System.out.println("4. Buscar una mascota");
-			System.out.println("5. Buscar mascotas");
-			System.out.println("6. Salir del menu del dueno");
+			System.out.println("4. Buscar mascotas");
+			System.out.println("5. Salir del menu del dueno");
 			
 			int choice = askInt();
 			
@@ -281,7 +280,11 @@ public class Menu {
 				String pGender = genderStr == 1 ? "M" : "F";		
 				String pType = askString("Por favor digite el tipo de la mascota");
 				
-				clubCollection.addPet(pName, pID, pBirthDate, pGender, pType);
+				if(!clubCollection.findPet(pName)) {
+					clubCollection.addPet(pName, pID, pBirthDate, pGender, pType);
+					System.out.println("La mascota ha sido agregada");
+				} else
+					System.out.println("ERROR. Ya existe una mascota con ese nombre");
 				
 				break;
 				
@@ -299,35 +302,30 @@ public class Menu {
 			case 4:
 				
 				System.out.println("Por favor elija el criterio de busqueda");
+				System.out.println("1. Buscar por nombre");
+				System.out.println("2. Buscar por ID");
+				System.out.println("3. Buscar por fecha de nacimiento");
+				System.out.println("4. Buscar por genero");
+				System.out.println("5. Buscar por tipo de mascota");
+				
+				int criteria = askInt();
+				
+				String item = askString("Digite lo que esta buscando"); 
+				
+				System.out.println(clubCollection.searchPets(criteria, item));
 				
 				
 				break;
 				
 			case 5:
 				
-				System.out.println("Por favor elija el criterio de busqueda");
-				System.out.println("1. Buscar por nombre");
-				System.out.println("2. Buscar por ID");
-				System.out.println("3. Buscar por fecha de creacion");
-				System.out.println("4. Buscar por tipo de mascota");
-				System.out.println("5. Buscar por numero de duenos");
-				
-				int criteria = askInt();
-				
-				String item = askString("Digite lo que esta buscando"); 
-				
-				System.out.println(clubCollection.searchClubs(criteria, item));
-				
-				break;
-				
-			case 6:
-				
 				exit = true;
-				break;
 				
+				break;
+
 			default:
 				
-				System.out.println("ERROR. Digite una opcion valida");
+				System.out.println("Por favor digite una opcion valida");
 				break;
 			
 			}
