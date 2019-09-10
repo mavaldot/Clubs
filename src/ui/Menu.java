@@ -2,16 +2,19 @@ package ui;
 
 import java.util.Scanner;
 import model.ClubCollection;
+import model.MockGenerator;
 
 public class Menu {
 
 	private ClubCollection clubCollection;
 	private Scanner s;
 	
+	private MockGenerator mockGenerator;
+	
 	public Menu() {
 		clubCollection = new ClubCollection();
 		s = new Scanner(System.in);
-		
+		mockGenerator = new MockGenerator();
 	}
 	
 	public void mainMenu() {
@@ -20,6 +23,9 @@ public class Menu {
 		
 		clubCollection.loadClubs();
 		clubCollection.loadOwners();
+		
+		//remove the comment (//) and run the program to generate 10000 owners and 100000 to 200000 pets in each club
+		//mockGenerator.generateMockClubCollection(clubCollection);
 		
 		while (running) {
 			
@@ -114,7 +120,7 @@ public class Menu {
 				
 				running = false;
 				clubCollection.saveClubs();
-				System.out.println("Hasta luego!");
+				System.out.println("Hasta luego :)");
 				break;
 			
 			default:

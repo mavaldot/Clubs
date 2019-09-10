@@ -30,6 +30,10 @@ public class ClubCollection {
 		selectedPetOwner = null;
 		order = ClubOrder.NONE;
 	}
+
+	public ArrayList<Club> getClubs() {
+		return clubs;
+	}
 	
 	public void saveClubs() {
 		

@@ -87,7 +87,10 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 		saveOwners();
 	}
 
-	
+	public void addPetOwner(PetOwner po) {
+		petOwners.add(po);
+	}
+
 	public void saveOwners() {
 		
 		File f = new File("res\\" + id + ".se");
@@ -374,9 +377,10 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 	public boolean deleteOwner(String deleteId) {
 		
 		boolean found = false;
+
 		
 		for (int i = 0; i < petOwners.size(); i++) {
-			if (petOwners.get(i).getId().equals(id)) {
+			if (petOwners.get(i).getId().equals(deleteId)) {
 				petOwners.remove(i);
 				found = true;
 			}
