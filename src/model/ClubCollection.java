@@ -98,6 +98,10 @@ public class ClubCollection {
 		saveClubs();
 	}
 	
+	public void addClub(Club c) {
+		clubs.add(c);
+	}
+	
 	public boolean deleteClub(String id) {
 		
 		boolean success = false;

@@ -13,7 +13,7 @@ public class MockGenerator {
 	public final String[] ANIMALS = {"Gatos", "Perros", "Hamsters", "Pajaros", "Serpientes",
 	"Ratones", "Aranas", "Cerdos", "Conejos", "Tortugas", "Peces", "Pollos"};
 	public final String[] ANIMAL = {"Gato", "Perro", "Hamster", "Pajaro", "Serpiente",
-	"Ratone", "Arana", "Cerdo", "Conejo", "Tortuga", "Pez", "Pollo"};
+	"Raton", "Arana", "Cerdo", "Conejo", "Tortuga", "Pez", "Pollo"};
 	
 	public MockGenerator() {
 		rand = new Random();

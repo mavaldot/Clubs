@@ -286,7 +286,7 @@ public class Menu {
 				String pGender = genderStr == 1 ? "M" : "F";		
 				String pType = askString("Por favor digite el tipo de la mascota");
 				
-				if(!clubCollection.findPet(pName)) {
+				if (!clubCollection.findPet(pName)) {
 					clubCollection.addPet(pName, pID, pBirthDate, pGender, pType);
 					System.out.println("La mascota ha sido agregada");
 				} else
