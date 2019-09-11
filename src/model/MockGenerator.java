@@ -25,7 +25,7 @@ public class MockGenerator {
 		
 		for (Club c : clubs) {
 			
-			for (int i = 0; i < 10000; i++) {
+			for (int i = 0; i < 100000; i++) {
 				String name = createRandomName();
 				String lastName = createRandomName();
 				String oid = createRandomId();
@@ -48,7 +48,7 @@ public class MockGenerator {
 				
 				c.addPetOwner(po);
 				
-				System.out.println("Generated" + i);
+				//System.out.println("Generated" + i);
 				
 				
 			}
