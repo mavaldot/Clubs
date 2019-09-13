@@ -40,34 +40,6 @@ class ClubTest {
 
 		c3.addPetOwner(p6);
 	}
-
-	
-	@Test
-	public void testFindOwner() {
-		loadScene1();
-		
-		assertTrue(c1.findOwner("1234"));
-		assertTrue(c1.findOwner("4445"));
-		assertTrue(c1.findOwner("5656"));
-		
-		assertTrue(c1.findOwner("0000") == false);
-		
-		assertTrue(c2.findOwner("4321"));
-		assertTrue(c2.findOwner("3333"));
-		
-		assertTrue(c2.findOwner("0909") == false);
-	}
-	
-	@Test
-	public void testCompareTo() {
-		
-		loadScene1();
-		
-		assertTrue(c1.compareTo(c2) > 0);
-		assertTrue(c3.compareTo(c1) > 0);
-		assertTrue(c2.compareTo(c3) < 0);
-		
-	}
 	
 	@Test
 	public void testOrderByName() {
@@ -113,6 +85,30 @@ class ClubTest {
 		assertEquals(c1.getPetOwners().get(2).getBirthDate(), "2005/02/04");
 		
 	}
+	
+	@Test
+	public void testOrderByNumberOfPetOwners() {
+		loadScene1();
+		c1.orderByNumberOfPets();
+		
+		assertEquals(c1.getPetOwners().size(), 3);
+		assertEquals(c1.getPetOwners().size(), 2);
+		assertEquals(c1.getPetOwners().size(), 1);
+		
+	}
+	
+	@Test
+	public void testOrderByPrefPetType() {
+		loadScene1();
+		c1.orderByPrefPetType();
+		
+		assertEquals(c1.getPetOwners().get(0).getPrefPetType(), "Gatos");
+		assertEquals(c1.getPetOwners().get(1).getPrefPetType(), "Perros");
+		assertEquals(c1.getPetOwners().get(2).getPrefPetType(), "Serpientes");
+		
+	}
+	
+	
 	
 	@Test
 	public void testPetOwnersBinarySearchName() {
