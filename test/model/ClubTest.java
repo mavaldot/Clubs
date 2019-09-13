@@ -147,7 +147,76 @@ class ClubTest {
 
 	}
 	
+	@Test
+	public void testPetOwnersBinarySearchBirthDate() {
+		loadScene1();
+		c1.orderByBirthDate();
+		
+		assertEquals(c1.petOwnersBinarySearchBirthDate("2000/01/01", 0, c1.getPetOwners().size()-1), p1.showInfo());
+		assertEquals(c1.petOwnersBinarySearchBirthDate("2005/02/04", 0, c1.getPetOwners().size()-1), p2.showInfo());
+		assertEquals(c1.petOwnersBinarySearchBirthDate("2004/06/24", 0, c1.getPetOwners().size()-1), p3.showInfo());
+		
+	}
 	
+	@Test
+	public void testPetOWnersBinarySearchPrefPetType() {
+		loadScene1();
+		c1.orderByPrefPetType();
+		
+		assertEquals(c1.petOwnersBinarySearchPrefPetType("Perros", 0, c1.getPetOwners().size()-1), p1.showInfo());
+		assertEquals(c1.petOwnersBinarySearchPrefPetType("Gatos", 0, c1.getPetOwners().size()-1), p2.showInfo());
+		assertEquals(c1.petOwnersBinarySearchPrefPetType("Serpientes", 0, c1.getPetOwners().size()-1), p3.showInfo());
+		
+
+	}
 	
+	@Test
+	public void testPetOwnersSearchName() {
+		loadScene1();
+		c1.orderByName();
+		
+		assertEquals(c1.petOwnersSearchName("Juan David"), p1.showInfo());
+		assertEquals(c1.petOwnersSearchName("Esteban"), p2.showInfo());
+		assertEquals(c1.petOwnersSearchName("Johan"), p3.showInfo());
+	}
 	
+	@Test
+	public void testPetOwnersSearchLastName() {
+		loadScene1();
+		c1.orderByLastName();
+		
+		assertEquals(c1.petOwnersSearchLastName("Ossa"), p1.showInfo());
+		assertEquals(c1.petOwnersSearchLastName("Ariza"), p2.showInfo());
+		assertEquals(c1.petOwnersSearchLastName("Giraldo"), p3.showInfo());
+	}
+	
+	@Test
+	public void testPetOwnersSearchId() {
+		loadScene1();
+		c1.orderById();
+		
+		assertEquals(c1.petOwnersSearchId("1234"), p1.showInfo());
+		assertEquals(c1.petOwnersSearchId("4445"), p2.showInfo());
+		assertEquals(c1.petOwnersSearchId("5656"), p3.showInfo());
+	}
+	
+	@Test
+	public void testPetOwnersSearchBirthDate() {
+		loadScene1();
+		c1.orderByBirthDate();
+		
+		assertEquals(c1.petOwnersSearchBirthDate("2000/01/01"), p1.showInfo());
+		assertEquals(c1.petOwnersSearchBirthDate("2005/02/04"), p2.showInfo());
+		assertEquals(c1.petOwnersSearchBirthDate("2004/06/24"), p3.showInfo());
+	}
+	
+	@Test
+	public void testPetOwnersSearchPrefPetType() {
+		loadScene1();
+		c1.orderByPrefPetType();
+		
+		assertEquals(c1.petOwnersSearchPrefPetType("Perros"), p1.showInfo());
+		assertEquals(c1.petOwnersSearchPrefPetType("Gatos"), p2.showInfo());
+		assertEquals(c1.petOwnersSearchPrefPetType("Serpientes"), p3.showInfo());
+	}
 }

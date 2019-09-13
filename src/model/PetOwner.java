@@ -1,10 +1,5 @@
 package model;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -80,6 +75,10 @@ public class PetOwner implements Serializable, Comparable<PetOwner>, Comparator<
 
 	public void addPet(String name, String id, String birthDate, String gender, String type) {
 		pets.add(new Pet(name, id, birthDate, gender, type));
+	}
+	
+	public void addPet(Pet p) {
+		pets.add(p);
 	}
 	
 	public boolean deletePet(String name) {
